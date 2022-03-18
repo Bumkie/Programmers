@@ -1,0 +1,49 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(String[] id_list, String[] report, int k) {
+        int[] answer = new int[id_list.length];
+        
+        HashSet<String> hs = new HashSet<>(); 
+        
+        for(int i = 0; i < report.length; i++)//HashSet으로 중복 제거
+            hs.add(report[i]);
+        
+        int[] times = new int[id_list.length];
+        
+        Iterator iter = hs.iterator();
+        ArrayList<String> cutting = new ArrayList<>();
+        for(int i = 0; i < hs.size(); i++){
+            if(iter.hasNext()){
+                String str = iter.next().toString();
+                cutting.add(str.substring(str.lastIndexOf(" ") + 1));
+                for(int j = 0; j < times.length; j++){
+                    if(cutting.get(i).equals(id_list[j]))
+                        times[j]++;
+                }
+            }
+        }
+        ArrayList<String> black = new ArrayList<>();
+        for(int i = 0; i < times.length; i++){
+            if(times[i] > k - 1)
+                black.add(id_list[i]);
+        }
+        
+        Iterator iter2 = hs.iterator();
+        for(int i = 0; i < hs.size(); i++){
+            if(iter2.hasNext()){
+                String str = iter2.next().toString();
+                if(black.contains(cutting.get(i))){
+                    for(int j = 0; j < id_list.length; j++){
+                        if(str.substring(0, str.lastIndexOf(" ")).equals(id_list[j]))
+                            answer[j]++;
+                            
+                    }
+                }
+            }
+            
+        }
+        
+        return answer;
+    }
+}
