@@ -1,0 +1,39 @@
+import java.util.*;
+
+class Solution {
+    public int solution(int n, int[] lost, int[] reserve) {
+        int answer = n - lost.length;
+        
+        Arrays.sort(lost);
+        Arrays.sort(reserve); //정렬을 통해 (2, 4) (3, 1) 에러 방지
+        
+        for(int i = 0; i < lost.length; i++){
+            for(int j = 0; j < reserve.length; j++){
+                if(lost[i] == reserve[j]){
+                    answer++;
+                    lost[i] = -5;
+                    reserve[j] = -5;
+                    break;
+                }
+            }
+        }//lost reserve 같을때 -5로 변경
+        
+        for(int i = 0; i < lost.length; i++){
+            for(int j = 0; j < reserve.length; j++){
+                
+                if(lost[i] + 1 == reserve[j]){
+                    reserve[j] = -1;
+                    answer++;
+                    break;
+                }
+                else if(lost[i] - 1 == reserve[j]){
+                    reserve[j] = -1;
+                    answer++;
+                    break;
+                }
+            }
+        }
+        
+        return answer;
+    }
+}
