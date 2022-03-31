@@ -1,0 +1,78 @@
+class Solution {
+    public int[] solution(String[][] places) {
+        int[] answer = {1, 1, 1, 1, 1};
+        
+        String[] akk = {"", "", "" ,"", ""};
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; j < 5; j++){
+                akk[i] = akk[i] + places[i][j];
+            }
+        }
+       
+        int q2=0;
+        int r2=0;
+        int n2 = 0;
+        for(int i = 0; i < 5; i++){
+            for(int Q = 0; Q < 5; Q++){
+                for(int R = 0; R < 5; R++){
+                    int n = Q * 5 + R;
+                    String cutting = akk[i].substring(Q * 5, Q * 5 + 5);
+                    if(cutting.contains("PP") || cutting.contains("POP")) {
+                        answer[i] = 0;
+                        break;
+                    }
+                    else {
+                        if(Q < 4){
+                            if(cutting.contains("PO") && R < 4) {
+                                q2 = Q+1;
+                                r2 = cutting.indexOf("PO") + 1;
+                                n2 = q2 * 5 + r2;
+                                if(akk[i].charAt(n2) == 'P'){
+                                    answer[i] = 0;
+                                    break;
+                                }
+                            }
+                            else if(cutting.contains("OP") && R > 0){
+                                q2 = Q+1;
+                                r2 = cutting.indexOf("OP");
+                                n2 = q2 * 5 + r2;
+                                if(akk[i].charAt(n2) == 'P'){
+                                    answer[i] = 0;
+                                    break;
+                                }
+                            }
+                            if(cutting.charAt(R) == 'P' && akk[i].charAt(n+5) == 'O'){
+                                if(R >= 0 && R < 4){
+                                    if(akk[i].charAt(n+6) == 'P'){
+                                        answer[i] = 0;
+                                        break;
+                                    }
+                                }
+                                if(R > 0 && R < 5){
+                                    if(akk[i].charAt(n+4) == 'P'){
+                                        answer[i] = 0;
+                                        break;
+                                    }
+                                }
+                                if(Q < 3){
+                                    if(akk[i].charAt(n+10) == 'P'){
+                                        answer[i] = 0;
+                                        break;
+                                    }
+                                }
+                                
+                            }
+                            else if (cutting.charAt(R) == 'P' && akk[i].charAt(n+5) == 'P') {
+								answer[i] = 0;
+								break;
+							}
+                        }
+                    }
+                       
+                }
+            }
+        }
+        
+        return answer;
+    }
+}
