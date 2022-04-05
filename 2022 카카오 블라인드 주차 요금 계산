@@ -1,0 +1,76 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(int[] fees, String[] records) {
+        int[] answer = {};
+        
+        HashMap<String, String> hm = new HashMap<>();
+        HashMap<String, Integer> total_time = new HashMap<>();
+        String[] numbers = {};
+        
+        String str_number;
+        int hour;
+        int minute;
+        
+        String in_time;
+        String out_time;
+        
+        for(int i = 0; i < records.length; i++){
+            str_number = records[i].substring(6, 10);
+            if(records[i].contains("IN"))
+                hm.put(str_number, records[i].substring(0, 5));
+            else {
+                in_time = hm.get(str_number);
+                out_time = records[i].substring(0, 5);
+                hour = Integer.parseInt(out_time.substring(0, 2)) - Integer.parseInt(in_time.substring(0, 2));
+                minute = Integer.parseInt(out_time.substring(3, 5)) - Integer.parseInt(in_time.substring(3, 5));
+                minute = hour * 60 + minute;
+                
+                if(total_time.containsKey(str_number))
+                    total_time.put(str_number, total_time.get(str_number) + minute);
+                else
+                    total_time.put(str_number, minute);
+                hm.put(str_number, "X");
+            }
+        }
+        
+        for(int i = 0; i < records.length; i++){
+            str_number = records[i].substring(6, 10);
+            
+            if(hm.get(str_number) != "X"){
+                in_time = hm.get(str_number);
+                hour = 23 - Integer.parseInt(in_time.substring(0, 2));
+                minute = 59 - Integer.parseInt(in_time.substring(3, 5));
+                minute = hour * 60 + minute;
+                if(total_time.containsKey(str_number))
+                    total_time.put(str_number, total_time.get(str_number) + minute);
+                else
+                    total_time.put(str_number, minute);
+                hm.put(str_number, "X");
+            }
+        }
+        numbers = new String[total_time.size()];
+        answer = new int[total_time.size()];
+        
+        Collection<String> values = total_time.keySet();
+        double dir_time;
+        int fee;
+        
+        Iterator itr = values.iterator();
+        
+        int j = 0;
+        while(itr.hasNext())
+            numbers[j++] = (String) itr.next();
+        Arrays.sort(numbers);
+        
+        for(int i = 0; i < numbers.length; i++){
+            dir_time = fees[2];
+            fee = (int) (fees[1] + Math.ceil((total_time.get(numbers[i]) - fees[0]) / dir_time) * fees[3]);
+            if(fee < fees[1])
+                fee = fees[1];
+            answer[i] = fee;
+        }
+        
+        return answer;
+    }
+}
