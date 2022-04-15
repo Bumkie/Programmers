@@ -1,0 +1,24 @@
+
+answer = 0
+def solution(numbers, target):
+ 
+  dfs(numbers, target, 0)
+  return answer
+
+def dfs(numbers, target, count):
+  if count == len(numbers):
+    for i in range(len(numbers)):
+      target -= numbers[i]
+    if(target == 0):
+      global answer # 전역변수를 쓰기 위해 global로 선언
+      answer += 1  # 선언하면서 바로 쓰지 못함
+      
+  else :
+    numbers[count] = numbers[count] * 1
+    dfs(numbers, target, count+1)
+    
+    numbers[count] = numbers[count] * -1
+    dfs(numbers, target, count+1)
+  
+
+print(solution(numbers, target))
